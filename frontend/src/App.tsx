@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { store } from './store/store';
 import Login from './components/Login';
 import KOLSearch from './components/KOLSearch';
+import BusinessDashboard from './components/BusinessDashboard';
+import KOLDashboard from './components/KOLDashboard';
 
 const theme = createTheme({
   palette: {
@@ -26,8 +28,9 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/business/dashboard" element={<KOLSearch />} />
-            <Route path="/kol/dashboard" element={<div>KOL Dashboard</div>} />
+            <Route path="/business/dashboard" element={<BusinessDashboard />} />
+            <Route path="/business/search" element={<KOLSearch />} />
+            <Route path="/kol/dashboard" element={<KOLDashboard />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>
