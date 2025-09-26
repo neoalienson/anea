@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const kolRoutes = require('./routes/kols');
 const campaignRoutes = require('./routes/campaigns');
+const integrationRoutes = require('./routes/integrations');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -18,6 +19,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/search/kols', kolRoutes);
 app.use('/api/kols', kolRoutes);
 app.use('/api/campaigns', campaignRoutes);
+app.use('/api/integrations', integrationRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
