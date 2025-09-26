@@ -7,12 +7,14 @@ const kolRoutes = require('./routes/kols');
 const campaignRoutes = require('./routes/campaigns');
 const integrationRoutes = require('./routes/integrations');
 const analyticsRoutes = require('./routes/analytics');
+const paymentRoutes = require('./routes/payments');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors());
+app.use('/api/payments/webhook', paymentRoutes); // Raw body for webhooks
 app.use(express.json());
 
 // Routes
@@ -22,6 +24,7 @@ app.use('/api/kols', kolRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/integrations', integrationRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
