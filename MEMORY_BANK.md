@@ -126,6 +126,19 @@ KOL Suitability Score = (Audience Match * 0.4) +
 - PostgreSQL 15+
 - Docker (for containerization)
 
+### Mock Data Available
+- 3 Business users with complete profiles
+- 5 KOL users with analytics data
+- 2 Active campaigns with applications
+- Realistic audience demographics and metrics
+
+### Setup Commands
+```bash
+cd database
+npm install
+npm run setup
+```
+
 ### Environment Variables
 ```
 # Database
