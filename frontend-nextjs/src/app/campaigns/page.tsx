@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import {
   Container, Typography, Box, Button, Card, CardContent, 
   Grid, Chip, Alert, Dialog, DialogTitle, DialogContent,
-  TextField, DialogActions, MenuItem
+  TextField, DialogActions, MenuItem, CardActionArea
 } from '@mui/material'
-import { Add, Campaign, AttachMoney } from '@mui/icons-material'
+import { Add, Campaign, AttachMoney, Visibility, People } from '@mui/icons-material'
 
 interface Campaign {
   id: string
@@ -127,42 +127,95 @@ export default function CampaignsPage() {
         <Grid container spacing={3}>
           {campaigns.map((campaign) => (
             <Grid item xs={12} md={6} key={campaign.id}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Campaign sx={{ mr: 1, color: 'primary.main' }} />
-                    <Typography variant="h6">{campaign.title}</Typography>
-                  </Box>
-                  
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {campaign.description}
-                  </Typography>
+              <Card sx={{ height: '100%' }}>
+                {isBusiness ? (
+                  <CardActionArea 
+                    onClick={() => router.push(`/campaigns/${campaign.id}`)}
+                    sx={{ height: '100%' }}
+                  >
+                    <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Campaign sx={{ mr: 1, color: 'primary.main' }} />
+                        <Typography variant="h6">{campaign.title}</Typography>
+                      </Box>
+                      
+                      <Typography variant="body2" color="text.secondary" paragraph>
+                        {campaign.description}
+                      </Typography>
 
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
-                    <Typography variant="body2">
-                      Budget: ${campaign.budget?.total?.toLocaleString()} {campaign.budget?.currency}
-                    </Typography>
-                  </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
+                        <Typography variant="body2">
+                          Budget: ${campaign.budget?.total?.toLocaleString()} {campaign.budget?.currency}
+                        </Typography>
+                      </Box>
 
-                  <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      Categories:
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                      {campaign.requirements?.categories?.map((category, index) => (
-                        <Chip key={index} label={category} size="small" />
-                      ))}
+                      <Box sx={{ mb: 2 }}>
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                          Categories:
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                          {campaign.requirements?.categories?.map((category, index) => (
+                            <Chip key={index} label={category} size="small" />
+                          ))}
+                        </Box>
+                      </Box>
+
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
+                        <Chip 
+                          label={campaign.status} 
+                          color={campaign.status === 'active' ? 'success' : 'default'}
+                          size="small"
+                        />
+                        <Button 
+                          variant="outlined" 
+                          size="small"
+                          startIcon={<People />}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            router.push(`/campaigns/${campaign.id}/applications`)
+                          }}
+                        >
+                          View Applications
+                        </Button>
+                      </Box>
+                    </CardContent>
+                  </CardActionArea>
+                ) : (
+                  <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Campaign sx={{ mr: 1, color: 'primary.main' }} />
+                      <Typography variant="h6">{campaign.title}</Typography>
                     </Box>
-                  </Box>
+                    
+                    <Typography variant="body2" color="text.secondary" paragraph>
+                      {campaign.description}
+                    </Typography>
 
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Chip 
-                      label={campaign.status} 
-                      color={campaign.status === 'active' ? 'success' : 'default'}
-                      size="small"
-                    />
-                    {!isBusiness && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
+                      <Typography variant="body2">
+                        Budget: ${campaign.budget?.total?.toLocaleString()} {campaign.budget?.currency}
+                      </Typography>
+                    </Box>
+
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Categories:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {campaign.requirements?.categories?.map((category, index) => (
+                          <Chip key={index} label={category} size="small" />
+                        ))}
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
+                      <Chip 
+                        label={campaign.status} 
+                        color={campaign.status === 'active' ? 'success' : 'default'}
+                        size="small"
+                      />
                       <Button 
                         variant="outlined" 
                         size="small"
@@ -170,9 +223,9 @@ export default function CampaignsPage() {
                       >
                         Apply
                       </Button>
-                    )}
-                  </Box>
-                </CardContent>
+                    </Box>
+                  </CardContent>
+                )}
               </Card>
             </Grid>
           ))}

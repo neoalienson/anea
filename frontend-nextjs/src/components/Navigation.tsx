@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import {
   AppBar, Toolbar, Typography, Button, Box, Avatar, Menu, MenuItem, IconButton
 } from '@mui/material'
-import { Campaign, Search, Person, Dashboard, ExitToApp } from '@mui/icons-material'
+import { Campaign, Search, Person, Dashboard, ExitToApp, Assignment } from '@mui/icons-material'
 import { useState } from 'react'
 
 export default function Navigation() {
@@ -91,6 +91,15 @@ export default function Navigation() {
                 data-testid="nav-campaigns"
               >
                 Campaigns
+              </Button>
+              <Button
+                color="inherit"
+                startIcon={<Assignment />}
+                onClick={() => router.push('/my-applications')}
+                sx={{ opacity: pathname === '/my-applications' ? 1 : 0.7 }}
+                data-testid="nav-my-applications"
+              >
+                My Applications
               </Button>
             </>
           )}
