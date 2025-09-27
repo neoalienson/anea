@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { securityHeaders, apiLimiter, authLimiter } = require('./middleware/security');
+const { logger } = require('./middleware/audit');
 
 const authRoutes = require('./routes/auth');
 const kolRoutes = require('./routes/kols');
@@ -8,23 +10,27 @@ const campaignRoutes = require('./routes/campaigns');
 const integrationRoutes = require('./routes/integrations');
 const analyticsRoutes = require('./routes/analytics');
 const paymentRoutes = require('./routes/payments');
+const gdprRoutes = require('./routes/gdpr');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Middleware
+// Security middleware
+app.use(securityHeaders);
 app.use(cors());
 app.use('/api/payments/webhook', paymentRoutes); // Raw body for webhooks
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(apiLimiter);
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/search/kols', kolRoutes);
 app.use('/api/kols', kolRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/integrations', integrationRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/gdpr', gdprRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
