@@ -184,6 +184,7 @@ export default function CampaignsPage() {
             <TextField
               fullWidth
               label="Campaign Title"
+              name="title"
               value={newCampaign.title}
               onChange={(e) => setNewCampaign(prev => ({ ...prev, title: e.target.value }))}
               margin="normal"
@@ -194,6 +195,7 @@ export default function CampaignsPage() {
               multiline
               rows={3}
               label="Description"
+              name="description"
               value={newCampaign.description}
               onChange={(e) => setNewCampaign(prev => ({ ...prev, description: e.target.value }))}
               margin="normal"
@@ -203,6 +205,7 @@ export default function CampaignsPage() {
               fullWidth
               type="number"
               label="Budget (USD)"
+              name="budget"
               value={newCampaign.budget}
               onChange={(e) => setNewCampaign(prev => ({ ...prev, budget: parseInt(e.target.value) }))}
               margin="normal"
@@ -228,6 +231,7 @@ export default function CampaignsPage() {
               fullWidth
               type="number"
               label="Minimum Followers"
+              name="minFollowers"
               value={newCampaign.minFollowers}
               onChange={(e) => setNewCampaign(prev => ({ ...prev, minFollowers: parseInt(e.target.value) }))}
               margin="normal"

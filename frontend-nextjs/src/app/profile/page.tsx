@@ -167,6 +167,7 @@ export default function ProfilePage() {
               <TextField
                 fullWidth
                 label="Display Name"
+                name="displayName"
                 value={profile.display_name}
                 onChange={(e) => setProfile(prev => ({ ...prev, display_name: e.target.value }))}
                 margin="normal"
@@ -177,6 +178,7 @@ export default function ProfilePage() {
                 multiline
                 rows={3}
                 label="Bio"
+                name="bio"
                 value={profile.bio}
                 onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
                 margin="normal"
@@ -185,6 +187,7 @@ export default function ProfilePage() {
               <TextField
                 fullWidth
                 label="YouTube Channel URL"
+                name="youtubeUrl"
                 value={youtubeUrl}
                 onChange={(e) => setYoutubeUrl(e.target.value)}
                 margin="normal"
@@ -197,6 +200,7 @@ export default function ProfilePage() {
               <TextField
                 fullWidth
                 label="Twitter Handle"
+                name="twitterHandle"
                 value={twitterHandle}
                 onChange={(e) => setTwitterHandle(e.target.value)}
                 margin="normal"
@@ -209,6 +213,7 @@ export default function ProfilePage() {
               <TextField
                 fullWidth
                 label="Primary Language"
+                name="language"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
                 margin="normal"

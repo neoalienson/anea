@@ -1,0 +1,79 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - alert [ref=e2]
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: KOL Platform
+      - generic [ref=e6]:
+        - button [ref=e7] [cursor=pointer]:
+          - img [ref=e9] [cursor=pointer]
+          - text: Dashboard
+        - button [ref=e11] [cursor=pointer]:
+          - img [ref=e13] [cursor=pointer]
+          - text: Campaigns
+        - button [ref=e15] [cursor=pointer]:
+          - img [ref=e17] [cursor=pointer]
+          - text: Discover
+        - button [ref=e19] [cursor=pointer]:
+          - generic [ref=e20] [cursor=pointer]: T
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - heading [level=1] [ref=e24]: My Campaigns
+      - button [ref=e25] [cursor=pointer]:
+        - img [ref=e27] [cursor=pointer]
+        - text: Create Campaign
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - img [ref=e34]
+        - heading [level=6] [ref=e36]: New Smartphone Launch
+      - paragraph [ref=e37]: Promote our latest flagship smartphone
+      - generic [ref=e38]:
+        - img [ref=e39]
+        - paragraph [ref=e41]: "Budget: $15,000 USD"
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: "Categories:"
+        - generic [ref=e44]:
+          - generic [ref=e46]: technology
+          - generic [ref=e48]: reviews
+      - generic [ref=e51]: active
+  - dialog "Create New Campaign" [ref=e54]:
+    - heading "Create New Campaign" [level=2] [ref=e55]
+    - generic [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]: Campaign Title
+        - generic [ref=e59]:
+          - textbox "Campaign Title" [ref=e60]: Test E2E Campaign
+          - group:
+            - generic: Campaign Title
+      - generic [ref=e61]:
+        - generic [ref=e62]: Description
+        - generic [ref=e63]:
+          - textbox "Description" [ref=e64]: This is a test campaign created during E2E testing
+          - group:
+            - generic: Description
+      - generic [ref=e65]:
+        - generic [ref=e66]: Budget (USD)
+        - generic [ref=e67]:
+          - spinbutton "Budget (USD)" [ref=e68]: "10000"
+          - group:
+            - generic: Budget (USD)
+      - generic [ref=e69]:
+        - generic [ref=e70]: Primary Category
+        - generic [ref=e71]:
+          - combobox "Primary Category Technology" [ref=e72] [cursor=pointer]: Technology
+          - textbox: technology
+          - img
+          - group:
+            - generic: Primary Category
+      - generic [ref=e73]:
+        - generic [ref=e74]: Minimum Followers
+        - generic [ref=e75]:
+          - spinbutton "Minimum Followers" [active] [ref=e76]: "50000"
+          - group:
+            - generic: Minimum Followers
+    - generic [ref=e77]:
+      - button "Cancel" [ref=e78] [cursor=pointer]: Cancel
+      - button "Create Campaign" [ref=e79] [cursor=pointer]: Create Campaign
+```

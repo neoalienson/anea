@@ -56,6 +56,7 @@ export default function Navigation() {
                 startIcon={<Campaign />}
                 onClick={() => router.push('/campaigns')}
                 sx={{ opacity: pathname === '/campaigns' ? 1 : 0.7 }}
+                data-testid="nav-campaigns"
               >
                 Campaigns
               </Button>
@@ -64,6 +65,7 @@ export default function Navigation() {
                 startIcon={<Search />}
                 onClick={() => router.push('/discover')}
                 sx={{ opacity: pathname === '/discover' ? 1 : 0.7 }}
+                data-testid="nav-discover"
               >
                 Discover
               </Button>
@@ -77,6 +79,7 @@ export default function Navigation() {
                 startIcon={<Person />}
                 onClick={() => router.push('/profile')}
                 sx={{ opacity: pathname === '/profile' ? 1 : 0.7 }}
+                data-testid="nav-profile"
               >
                 Profile
               </Button>
@@ -85,6 +88,7 @@ export default function Navigation() {
                 startIcon={<Campaign />}
                 onClick={() => router.push('/campaigns')}
                 sx={{ opacity: pathname === '/campaigns' ? 1 : 0.7 }}
+                data-testid="nav-campaigns"
               >
                 Campaigns
               </Button>
@@ -95,6 +99,7 @@ export default function Navigation() {
             size="large"
             onClick={handleMenu}
             color="inherit"
+            data-testid="user-menu"
           >
             <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
               {session.user?.email?.charAt(0).toUpperCase()}

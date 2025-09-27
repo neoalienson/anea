@@ -102,6 +102,7 @@ export default function DiscoverPage() {
               <TextField
                 fullWidth
                 label="Search KOLs"
+                placeholder="Search KOLs"
                 value={filters.search}
                 onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                 InputProps={{
@@ -119,6 +120,7 @@ export default function DiscoverPage() {
                 fullWidth
                 select
                 label="Category"
+                name="category"
                 value={filters.category}
                 onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
               >
