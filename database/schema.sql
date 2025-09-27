@@ -25,6 +25,100 @@ CREATE TABLE business_profiles (
     target_audience JSONB,
     budget_range JSONB,
     verification_documents JSONB,
+    
+    -- Enhanced SMB Business Intelligence Signals
+    -- Company Information
+    legal_business_name VARCHAR(500),
+    business_registration_number VARCHAR(100),
+    tax_id VARCHAR(100),
+    founded_year INTEGER,
+    business_type VARCHAR(50), -- LLC, Corporation, Partnership, etc.
+    
+    -- Financial Metrics
+    annual_revenue DECIMAL(15,2),
+    revenue_growth_rate DECIMAL(5,2), -- percentage
+    profit_margin DECIMAL(5,2), -- percentage
+    employee_count INTEGER,
+    employee_growth_rate DECIMAL(5,2), -- percentage
+    funding_raised DECIMAL(15,2),
+    funding_stage VARCHAR(50), -- seed, series-a, etc.
+    stock_ticker VARCHAR(10),
+    market_cap DECIMAL(15,2),
+    
+    -- Geographic Presence
+    headquarters_address JSONB, -- {street, city, state, country, zipcode}
+    operating_countries JSONB DEFAULT '[]'::jsonb, -- array of country codes
+    office_locations JSONB DEFAULT '[]'::jsonb, -- array of office details
+    franchise_count INTEGER DEFAULT 0,
+    retail_locations INTEGER DEFAULT 0,
+    
+    -- Industry & Market Position
+    primary_industry VARCHAR(100),
+    secondary_industries JSONB DEFAULT '[]'::jsonb,
+    industry_rank INTEGER, -- ranking in industry
+    market_share_percentage DECIMAL(5,2),
+    key_competitors JSONB DEFAULT '[]'::jsonb,
+    
+    -- Products & Services
+    primary_products JSONB DEFAULT '[]'::jsonb,
+    secondary_products JSONB DEFAULT '[]'::jsonb,
+    service_categories JSONB DEFAULT '[]'::jsonb,
+    product_portfolio_size INTEGER DEFAULT 0,
+    
+    -- Online Presence & Digital Footprint
+    linkedin_company_url VARCHAR(500),
+    linkedin_followers INTEGER DEFAULT 0,
+    linkedin_engagement_rate DECIMAL(5,4) DEFAULT 0,
+    google_maps_rating DECIMAL(3,2) DEFAULT 0,
+    google_maps_review_count INTEGER DEFAULT 0,
+    website_traffic_rank INTEGER,
+    website_monthly_visitors INTEGER,
+    domain_authority INTEGER DEFAULT 0,
+    
+    -- Social Media Presence
+    social_media_presence JSONB DEFAULT '{}'::jsonb, -- platform-specific metrics
+    brand_mention_sentiment DECIMAL(3,2) DEFAULT 0, -- -1 to 1 scale
+    online_reputation_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    
+    -- Business Operations
+    business_model VARCHAR(100), -- B2B, B2C, B2B2C, etc.
+    revenue_streams JSONB DEFAULT '[]'::jsonb,
+    target_market_segments JSONB DEFAULT '[]'::jsonb,
+    seasonal_business_patterns JSONB DEFAULT '{}'::jsonb,
+    
+    -- Certifications & Compliance
+    industry_certifications JSONB DEFAULT '[]'::jsonb,
+    compliance_standards JSONB DEFAULT '[]'::jsonb,
+    quality_ratings JSONB DEFAULT '{}'::jsonb,
+    
+    -- Technology & Innovation
+    technology_stack JSONB DEFAULT '[]'::jsonb,
+    digital_transformation_score DECIMAL(3,2) DEFAULT 0,
+    innovation_index DECIMAL(3,2) DEFAULT 0,
+    
+    -- Partnership & Network
+    key_partnerships JSONB DEFAULT '[]'::jsonb,
+    supplier_network_size INTEGER DEFAULT 0,
+    customer_segments JSONB DEFAULT '[]'::jsonb,
+    
+    -- Risk & Stability Metrics
+    financial_stability_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    credit_rating VARCHAR(10),
+    business_risk_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    
+    -- Marketing & Advertising Intelligence
+    advertising_spend_annual DECIMAL(12,2),
+    marketing_channels JSONB DEFAULT '[]'::jsonb,
+    brand_awareness_score DECIMAL(3,2) DEFAULT 0,
+    customer_acquisition_cost DECIMAL(10,2),
+    customer_lifetime_value DECIMAL(10,2),
+    
+    -- ESG & Sustainability
+    sustainability_rating DECIMAL(3,2) DEFAULT 0,
+    environmental_certifications JSONB DEFAULT '[]'::jsonb,
+    social_responsibility_score DECIMAL(3,2) DEFAULT 0,
+    governance_score DECIMAL(3,2) DEFAULT 0,
+    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -41,6 +135,55 @@ CREATE TABLE kol_profiles (
     audience_metrics JSONB,
     content_style JSONB,
     verification_status VARCHAR(20) DEFAULT 'pending',
+    
+    -- Enhanced KOL Signals
+    -- Platform Metrics
+    instagram_follower_count INTEGER DEFAULT 0,
+    youtube_subscriber_count INTEGER DEFAULT 0,
+    instagram_engagement_rate DECIMAL(5,4) DEFAULT 0,
+    youtube_engagement_rate DECIMAL(5,4) DEFAULT 0,
+    
+    -- Content Analysis
+    topics_covered_youtube JSONB DEFAULT '[]'::jsonb,
+    topics_covered_instagram JSONB DEFAULT '[]'::jsonb,
+    content_frequency JSONB DEFAULT '{}'::jsonb, -- posts per week/month
+    content_quality_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    
+    -- Brand Collaboration History
+    previous_brand_deals JSONB DEFAULT '[]'::jsonb,
+    industries_worked_with JSONB DEFAULT '[]'::jsonb,
+    products_advertised JSONB DEFAULT '[]'::jsonb,
+    average_brand_deal_value DECIMAL(10,2),
+    
+    -- Activity & Experience
+    account_age_months INTEGER DEFAULT 0,
+    activity_consistency_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    peak_posting_hours JSONB DEFAULT '[]'::jsonb,
+    seasonal_trends JSONB DEFAULT '{}'::jsonb,
+    
+    -- Audience Insights
+    audience_age_distribution JSONB DEFAULT '{}'::jsonb,
+    audience_gender_split JSONB DEFAULT '{}'::jsonb,
+    audience_location_top_cities JSONB DEFAULT '[]'::jsonb,
+    audience_interests JSONB DEFAULT '[]'::jsonb,
+    
+    -- Performance Metrics
+    average_likes_per_post INTEGER DEFAULT 0,
+    average_comments_per_post INTEGER DEFAULT 0,
+    average_shares_per_post INTEGER DEFAULT 0,
+    viral_content_count INTEGER DEFAULT 0,
+    
+    -- Authenticity & Trust Signals
+    fake_follower_percentage DECIMAL(5,2) DEFAULT 0,
+    brand_safety_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    content_authenticity_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    community_sentiment_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    
+    -- Niche Expertise
+    niche_authority_score DECIMAL(3,2) DEFAULT 0, -- 0-10 scale
+    expert_topics JSONB DEFAULT '[]'::jsonb,
+    collaboration_readiness BOOLEAN DEFAULT false,
+    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
