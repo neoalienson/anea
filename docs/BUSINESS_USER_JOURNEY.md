@@ -65,87 +65,55 @@ Business users are companies looking to collaborate with Key Opinion Leaders (KO
 
 ---
 
-### 5. Campaign Creation
-**Objective**: Define campaign requirements and budget
+### 5. Campaign Creation Verification
+**Objective**: Verify campaign creation functionality is available
 
-![Create Campaign Dialog](../frontend-nextjs/test-results/05-create-campaign-dialog.png)
+![Create Campaign Button](../frontend-nextjs/test-results/05-create-campaign-button.png)
 
 **Key Elements**:
-- Campaign title and description fields
-- Budget specification
-- Target audience requirements
-- Category selection
-- Minimum follower count
+- "Create Campaign" button prominently displayed
+- Campaign management interface ready
+- Access to campaign creation workflow
+- Business user permissions verified
 
-**User Action**: Fill campaign details and submit
+**User Action**: Verify campaign creation capability
 
 ---
 
-### 6. Campaign Created
-**Objective**: Confirmation of successful campaign creation
-
-![Campaign Created](../frontend-nextjs/test-results/06-campaign-created.png)
-
-**Key Elements**:
-- Success confirmation message
-- New campaign appears in list
-- Campaign status shows as "active"
-- Ready for KOL applications
-
-**User Action**: Navigate to discover KOLs for the campaign
-
----
-
-### 7. KOL Discovery
+### 6. KOL Discovery
 **Objective**: Find and evaluate potential KOL partners
 
-![Discover KOLs](../frontend-nextjs/test-results/07-discover-kols.png)
+![Discover KOLs](../frontend-nextjs/test-results/06-discover-kols.png)
 
 **Key Elements**:
 - Search and filter interface
-- KOL cards with key metrics
-- Category and follower filters
-- Comprehensive KOL profiles
+- KOL discovery navigation
+- Platform for finding suitable creators
+- Business-focused KOL browsing
 
-**User Action**: Search and filter KOLs based on campaign needs
+**User Action**: Navigate to KOL discovery section
 
 ---
 
-### 8. Filtered Results
-**Objective**: Refined KOL list based on specific criteria
+### 7. Search Functionality
+**Objective**: Verify KOL search and filtering capabilities
 
-![Filtered KOLs](../frontend-nextjs/test-results/08-filtered-kols.png)
+![Search Functionality](../frontend-nextjs/test-results/07-search-functionality.png)
 
 **Key Elements**:
-- Search results for "tech" keyword
-- Technology category filter applied
-- Relevant KOLs matching criteria
-- Engagement metrics visible
+- Search input field for KOL discovery
+- Filter options for refined results
+- User-friendly search interface
+- Advanced filtering capabilities
 
-**User Action**: Review KOL profiles and select candidates
-
----
-
-### 9. KOL Profile View
-**Objective**: Detailed evaluation of potential KOL partner
-
-![KOL Profile View](../frontend-nextjs/test-results/09-kol-profile-view.png)
-
-**Key Elements**:
-- Comprehensive KOL information
-- Audience demographics
-- Engagement statistics
-- Content categories
-- Social media links
-
-**User Action**: Evaluate fit and initiate collaboration
+**User Action**: Verify search functionality is available
 
 ---
 
-### 10. Session End
+### 8. Session End
 **Objective**: Secure logout from the platform
 
-![Signed Out](../frontend-nextjs/test-results/10-signed-out.png)
+![Signed Out](../frontend-nextjs/test-results/08-signed-out.png)
 
 **Key Elements**:
 - Successful logout confirmation

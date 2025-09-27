@@ -86,7 +86,8 @@ CREATE TABLE kol_analytics (
     average_views INTEGER,
     audience_demographics JSONB,
     top_content_categories JSONB,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(kol_id, platform)
 );
 
 -- Campaign Performance
@@ -112,4 +113,7 @@ CREATE INDEX idx_campaigns_status ON campaigns(status);
 CREATE INDEX idx_campaign_kols_campaign_id ON campaign_kols(campaign_id);
 CREATE INDEX idx_campaign_kols_kol_id ON campaign_kols(kol_id);
 CREATE INDEX idx_kol_analytics_kol_id ON kol_analytics(kol_id);
+CREATE INDEX idx_kol_analytics_platform ON kol_analytics(platform);
+CREATE INDEX idx_kol_profiles_verification ON kol_profiles(verification_status);
+CREATE INDEX idx_kol_profiles_categories ON kol_profiles USING GIN(categories);
 CREATE INDEX idx_campaign_performance_campaign_id ON campaign_performance(campaign_id);

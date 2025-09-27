@@ -1,16 +1,16 @@
 import { test, expect } from '@playwright/test';
 
-test('Business User Journey', async ({ page }) => {
+test('Business User Simple Journey', async ({ page }) => {
   // Step 1: Landing page
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  await page.screenshot({ path: 'test-results/01-landing-page.png' });
+  await page.screenshot({ path: 'test-results/simple-01-landing-page.png' });
   await expect(page.locator('text=KOL Matching Platform')).toBeVisible();
   await page.click('text=Sign In');
 
   // Step 2: Sign in
   await page.waitForURL(/.*signin/);
-  await page.screenshot({ path: 'test-results/02-signin-page.png' });
+  await page.screenshot({ path: 'test-results/simple-02-signin-page.png' });
   
   await page.fill('input[name="email"]', 'techcorp@example.com');
   await page.fill('input[name="password"]', 'password123');
@@ -23,43 +23,39 @@ test('Business User Journey', async ({ page }) => {
 
   // Step 3: Dashboard
   await page.waitForLoadState('networkidle');
-  await page.screenshot({ path: 'test-results/03-business-dashboard.png' });
+  await page.screenshot({ path: 'test-results/simple-03-business-dashboard.png' });
   
-  // Verify login by checking navigation
+  // Check if we're logged in by looking for navigation
   const navigation = page.locator('[data-testid="nav-campaigns"]');
   await expect(navigation).toBeVisible();
-  console.log('Successfully logged in as business user');
 
   // Step 4: Navigate to Campaigns
   await navigation.click();
   await page.waitForURL(/.*campaigns/);
   await page.waitForLoadState('networkidle');
-  await page.screenshot({ path: 'test-results/04-campaigns-page.png' });
+  await page.screenshot({ path: 'test-results/simple-04-campaigns-page.png' });
 
-  // Step 5: Verify Create Campaign button exists
+  // Step 5: Check if Create Campaign button exists
   const createButton = page.locator('text=Create Campaign');
   await expect(createButton).toBeVisible();
-  await page.screenshot({ path: 'test-results/05-create-campaign-button.png' });
-  console.log('Create Campaign functionality verified');
+  await page.screenshot({ path: 'test-results/simple-05-create-button-visible.png' });
 
-  // Step 6: Navigate to Discover KOLs
+  // Step 6: Navigate to Discover
   const discoverButton = page.locator('[data-testid="nav-discover"]');
   await discoverButton.click();
   await page.waitForURL(/.*discover/);
   await page.waitForLoadState('networkidle');
-  await page.screenshot({ path: 'test-results/06-discover-kols.png' });
+  await page.screenshot({ path: 'test-results/simple-06-discover-page.png' });
 
-  // Step 7: Verify search functionality
+  // Step 7: Check if search functionality exists
   const searchInput = page.locator('input[placeholder*="Search"]');
   await expect(searchInput).toBeVisible();
-  await page.screenshot({ path: 'test-results/07-search-functionality.png' });
-  console.log('KOL discovery functionality verified');
 
   // Step 8: Sign out
   await page.click('[data-testid="user-menu"]');
   await page.click('text=Sign Out');
   await page.waitForTimeout(2000);
-  await page.screenshot({ path: 'test-results/08-signed-out.png' });
-  
-  console.log('Business user journey completed successfully');
+  await page.screenshot({ path: 'test-results/simple-07-signed-out.png' });
+
+  console.log('Simple business user journey completed successfully');
 });
