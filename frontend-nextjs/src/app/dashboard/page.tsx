@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { Container, Typography, Box, Paper, Button } from '@mui/material'
+import { Container, Typography, Box, Paper } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -37,15 +37,7 @@ export default function DashboardPage() {
           <Typography variant="body1" sx={{ mt: 1 }}>
             User ID: {session.user?.id}
           </Typography>
-          {(session.user as any)?.role === 'kol' && (
-            <Button 
-              variant="contained" 
-              sx={{ mt: 2 }}
-              onClick={() => router.push('/profile')}
-            >
-              Manage Profile
-            </Button>
-          )}
+
         </Paper>
       </Box>
     </Container>
