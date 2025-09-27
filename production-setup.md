@@ -3,112 +3,84 @@
 ## Prerequisites
 
 ### Infrastructure Requirements
-- **Kubernetes Cluster**: v1.24+ (EKS, GKE, or AKS recommended)
-- **PostgreSQL**: v15+ (managed service recommended)
-- **Redis**: v7+ (for caching and sessions)
-- **Load Balancer**: NGINX Ingress Controller
-- **SSL Certificates**: Let's Encrypt or managed certificates
-- **Monitoring**: Prometheus + Grafana stack
-
-### External Services
-- **Stripe Account**: For payment processing
-- **YouTube API**: Google Cloud Console project with YouTube Data API v3
+- **VPS/Server**: 4GB RAM, 2 CPU cores, 50GB SSD (Ubuntu 22.04 LTS)
+- **Node.js**: v18+ LTS
+- **PM2**: Process management
+- **Nginx**: Reverse proxy and SSL termination
 - **Domain**: Registered domain with DNS management
-- **Email Service**: SMTP server for notifications
+
+### SaaS Services
+- **Supabase**: Database, Authentication, Storage ($25/month)
+- **Stripe**: Payment processing (2.9% + 30¢ per transaction)
+- **YouTube API**: Google Cloud Console project with YouTube Data API v3
+- **Resend**: Email service ($20/month for 100k emails)
+- **Sentry**: Error monitoring ($26/month)
+- **Total SaaS Cost**: ~$71/month + transaction fees
 
 ## Deployment Steps
 
-### 1. Environment Setup
+### 1. Server Setup
 
 ```bash
-# Clone repository
-git clone <repository-url>
-cd anea
+# Run initial server setup
+./deployment/setup.sh
+```
 
-# Create production environment files
+### 2. Application Setup
+
+```bash
+# Clone repository to server
+git clone <repository-url> /var/www/kol-platform
+cd /var/www/kol-platform
+
+# Install dependencies
+npm run setup
+
+# Create environment files
+cp .env.example .env.production
+cp frontend-nextjs/.env.example frontend-nextjs/.env.local
 cp backend/.env.example backend/.env.production
-cp frontend/.env.example frontend/.env.production
 
 # Update with production values
+nano .env.production
+nano frontend-nextjs/.env.local
 nano backend/.env.production
-nano frontend/.env.production
 ```
 
-### 2. Database Setup
+### 3. Supabase Setup
 
 ```bash
-# Create production database
-createdb kol_platform_prod
-
-# Run migrations
+# Create Supabase project at https://app.supabase.com
+# Run database migrations
 cd database
 npm install
-DATABASE_URL="postgresql://user:pass@host:5432/kol_platform_prod" npm run setup
+npm run setup
 ```
 
-### 3. Build and Push Images
+### 4. Build and Deploy
 
 ```bash
-# Build backend image
-docker build -t your-registry/kol-backend:v1.0.0 ./backend
-docker push your-registry/kol-backend:v1.0.0
+# Build application
+npm run build
 
-# Build frontend image
-docker build -t your-registry/kol-frontend:v1.0.0 ./frontend
-docker push your-registry/kol-frontend:v1.0.0
+# Start with PM2
+pm2 start ecosystem.config.js --env production
+pm2 save
 ```
 
-### 4. Kubernetes Deployment
+### 5. Configure Nginx and SSL
 
 ```bash
-# Create namespace
-kubectl create namespace kol-platform
+# Copy Nginx configuration
+sudo cp deployment/nginx.conf /etc/nginx/sites-available/kol-platform
+sudo ln -s /etc/nginx/sites-available/kol-platform /etc/nginx/sites-enabled/
 
-# Create secrets
-kubectl create secret generic backend-secret \
-  --from-literal=jwt-secret="your-production-jwt-secret" \
-  --from-literal=jwt-refresh-secret="your-production-refresh-secret" \
-  --from-literal=youtube-api-key="your-youtube-api-key" \
-  --from-literal=stripe-secret-key="your-stripe-secret-key" \
-  --from-literal=stripe-webhook-secret="your-webhook-secret" \
-  -n kol-platform
+# Test and reload Nginx
+sudo nginx -t
+sudo systemctl reload nginx
 
-# Deploy components
-kubectl apply -f k8s/postgres.yaml
-kubectl apply -f k8s/backend.yaml
-kubectl apply -f k8s/frontend.yaml
-kubectl apply -f k8s/monitoring.yaml
-
-# Wait for deployment
-kubectl wait --for=condition=available deployment --all -n kol-platform --timeout=600s
-```
-
-### 5. Configure Ingress and SSL
-
-```bash
-# Install cert-manager (if not already installed)
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
-
-# Create cluster issuer for Let's Encrypt
-kubectl apply -f - <<EOF
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: admin@your-domain.com
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
-EOF
-
-# Update ingress with your domain
-kubectl apply -f k8s/frontend.yaml
+# Setup SSL with Let's Encrypt
+sudo certbot --nginx -d yourdomain.com -d api.yourdomain.com
 ```
 
 ## Configuration

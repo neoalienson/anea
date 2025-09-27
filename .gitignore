@@ -33,6 +33,10 @@ coverage/
 dist/
 build/
 out/
+.next/
+
+# Old frontend (to be removed)
+frontend/
 
 # IDE files
 .vscode/
@@ -59,5 +63,7 @@ package-lock.json
 yarn.lock
 
 # Production builds
-frontend/build/
+frontend-nextjs/.next/
 backend/dist/
+
+.nyc_output/

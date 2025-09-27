@@ -9,16 +9,21 @@
 ## Key Decisions & Architecture
 
 ### Technology Stack Decisions
-- **Frontend:** React 18.2+ with TypeScript, Vite, Material-UI v5
+- **Frontend:** Next.js 14+ with TypeScript, Material-UI v5
 - **Backend:** Node.js 18+ with Express.js, TypeScript
-- **Database:** PostgreSQL with Prisma ORM
-- **Authentication:** JWT with OAuth2 integration
+- **Database:** Supabase PostgreSQL (SaaS)
+- **Authentication:** NextAuth.js + Supabase Auth
+- **File Storage:** Supabase Storage
+- **Email:** Resend (SaaS)
+- **Monitoring:** Sentry (SaaS)
 - **Primary API:** YouTube Data API v3 (TikTok/Instagram planned for Phase 2)
 
 ### Architecture Pattern
-- **Pattern:** Monolithic backend with modular structure
-- **Database Strategy:** Single PostgreSQL database
-- **Authentication:** JWT-based stateless authentication
+- **Pattern:** Next.js full-stack with separate Express API
+- **Database Strategy:** Supabase PostgreSQL (SaaS)
+- **Authentication:** NextAuth.js with Supabase integration
+- **Deployment:** Local processes with PM2 (no Docker/Kubernetes)
+- **Infrastructure:** SaaS-first approach for simplicity
 
 ## Implementation Progress Tracker
 
@@ -86,35 +91,51 @@
 - [x] Comprehensive test runner script
 - [x] Automated CI/CD pipeline
 
-### Phase 9: Deployment & Production (Week 19-20) - Status: ✅ COMPLETED
-- [x] Docker containerization (backend & frontend)
-- [x] Docker Compose for development
-- [x] Kubernetes deployment configurations
-- [x] CI/CD pipeline with GitHub Actions
-- [x] Production deployment guide
-- [x] Monitoring and alerting setup
-- [x] Security hardening for production
-- [x] Backup and disaster recovery procedures
-- [x] Performance optimization configurations
-- [x] Comprehensive documentation
+### Phase 9: Deployment & Production (Week 19-20) - Status: 🔄 REVISED
+- [x] Local deployment with PM2 process management
+- [x] Nginx reverse proxy configuration
+- [x] SaaS service integrations (Supabase, Resend, Sentry)
+- [x] Next.js migration from React+Vite
+- [x] Simplified deployment scripts
+- [x] SSL setup with Let's Encrypt
+- [x] Production environment configuration
+- [x] Monitoring with SaaS tools
+- [x] Backup strategy using SaaS providers
+- [x] Cost-optimized infrastructure
 
 ## Critical Dependencies & Integrations
 
-### External APIs
-1. **YouTube Data API v3**
+### SaaS Services & External APIs
+1. **Supabase**
+   - Status: ✅ Integrated
+   - Services: PostgreSQL, Authentication, Storage
+   - Plan: Pro ($25/month)
+   - Features: Real-time subscriptions, Row Level Security
+
+2. **YouTube Data API v3**
    - Status: ✅ Fully Integrated
    - Quota: 10,000 units/day (default)
    - Authentication: API Key based
    - Key endpoints: Channels, Videos, Search, Analytics
    - Features: Channel stats, subscriber counts, engagement metrics
 
-2. **Stripe Payment API**
+3. **Stripe Payment API**
    - Status: ✅ Fully Integrated
    - Version: 2023-10-16
    - Features: Payment processing, webhooks, multi-currency
    - Commission: 5% platform fee automatically calculated
 
-3. **Future Integrations**
+4. **Resend Email API**
+   - Status: ✅ Integrated
+   - Plan: $20/month for 100k emails
+   - Features: Transactional emails, templates
+
+5. **Sentry Monitoring**
+   - Status: ✅ Integrated
+   - Plan: $26/month
+   - Features: Error tracking, performance monitoring
+
+6. **Future Integrations**
    - TikTok API (limited availability)
    - Instagram Basic Display API
    - Twitter/X API
@@ -156,8 +177,9 @@ KOL Suitability Score = (Audience Match * 0.4) +
 
 ### Required Tools
 - Node.js 18+ LTS
-- PostgreSQL 15+
-- Docker (for containerization)
+- PM2 (process management)
+- Nginx (reverse proxy)
+- Supabase CLI (database management)
 
 ### Mock Data Available
 - 3 Business users with complete profiles
@@ -167,23 +189,34 @@ KOL Suitability Score = (Audience Match * 0.4) +
 
 ### Setup Commands
 ```bash
-cd database
-npm install
-npm run setup
+# Development
+npm run dev
+
+# Production deployment
+./deployment/setup.sh
+./deployment/deploy.sh production
+
+# Process management
+pm2 start ecosystem.config.js
+pm2 monit
 ```
 
 ### Environment Variables
 ```
-# Database
-DATABASE_URL=postgresql://...
+# Next.js
+NEXTAUTH_URL=https://yourdomain.com
+NEXTAUTH_SECRET=...
 
-# Authentication
-JWT_SECRET=...
-JWT_REFRESH_SECRET=...
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 
 # External APIs
 YOUTUBE_API_KEY=...
 STRIPE_SECRET_KEY=...
+RESEND_API_KEY=...
+SENTRY_DSN=...
 ```
 
 ## Known Issues & Risks
@@ -215,19 +248,20 @@ STRIPE_SECRET_KEY=...
 ## Deployment & DevOps
 
 ### Environments
-- **Development:** Local with hot reload
-- **Staging:** Single instance with test data
-- **Production:** Multi-region with load balancing
+- **Development:** Local with Next.js dev server
+- **Staging:** Single VPS with PM2
+- **Production:** Single VPS with PM2 + Nginx
 
-### CI/CD Pipeline
+### Deployment Pipeline
 ```
-Code → Lint/Test → Build → Security Scan → Deploy → Monitor
+Code → Test → Build → Deploy with PM2 → Monitor with Sentry
 ```
 
 ### Monitoring Stack
-- Application: Health checks, error tracking
-- Infrastructure: CPU, memory, network
-- Business: User engagement, conversions
+- **Application:** Sentry for errors and performance
+- **Infrastructure:** PM2 monitoring + server metrics
+- **Business:** Vercel Analytics + custom dashboards
+- **Costs:** ~$111-131/month total SaaS costs
 
 ## Important File Locations
 
@@ -291,44 +325,44 @@ Code → Lint/Test → Build → Security Scan → Deploy → Monitor
 ### Useful Commands
 ```bash
 # Development
-npm run dev          # Start development server
+npm run dev          # Start Next.js development server
 npm run build        # Build for production
 npm run test         # Run test suite
 npm run lint         # Code linting
 
-# Database
-npm run db:migrate   # Run database migrations
-npm run db:seed      # Seed development data
-npm run db:reset     # Reset database
+# Database (Supabase)
+supabase start       # Start local Supabase
+supabase db push     # Push migrations
+supabase db reset    # Reset database
 
 # Deployment
-./deploy.sh development    # Start development environment
-./deploy.sh staging       # Deploy to staging
-./deploy.sh production    # Deploy to production
+./deployment/setup.sh      # Initial server setup
+./deployment/deploy.sh production  # Deploy to production
+
+# Process Management
+pm2 start ecosystem.config.js     # Start all processes
+pm2 restart all                   # Restart all processes
+pm2 monit                         # Monitor processes
+pm2 logs                          # View logs
+pm2 status                        # Check status
 
 # Testing
-node test-runner.js       # Run comprehensive test suite
-npm run test:coverage     # Run tests with coverage
+npm test                          # Run test suite
+npm run test:coverage             # Run tests with coverage
 
-# Docker
-docker-compose up --build # Start with Docker Compose
-docker-compose down       # Stop all services
-
-# Kubernetes
-kubectl apply -f k8s/     # Deploy to Kubernetes
-kubectl get pods -n kol-platform  # Check pod status
-kubectl logs -f deployment/backend -n kol-platform  # View logs
+# SSL Setup
+sudo certbot --nginx -d yourdomain.com  # Setup SSL certificate
 ```
 
 ### Important URLs
-- **Development Frontend**: http://localhost (Docker) / http://localhost:3000 (npm)
+- **Development Frontend**: http://localhost:3000 (Next.js)
 - **Development Backend**: http://localhost:8000
 - **API Health Check**: http://localhost:8000/health
-- **Database**: localhost:5432 (postgres/password)
-- **Production**: https://kol-platform.com
-- **Production API**: https://api.kol-platform.com
-- **Monitoring**: https://grafana.kol-platform.com
-- **Status Page**: https://status.kol-platform.com
+- **Supabase Dashboard**: https://app.supabase.com
+- **Production**: https://yourdomain.com
+- **Production API**: https://api.yourdomain.com
+- **Sentry Dashboard**: https://sentry.io
+- **Stripe Dashboard**: https://dashboard.stripe.com
 
 ---
 
