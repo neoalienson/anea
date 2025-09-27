@@ -1,3 +1,5 @@
+'use client'
+
 import { Container, Paper, Box, Typography, TextField, Button } from '@mui/material'
 import { signIn } from 'next-auth/react'
 

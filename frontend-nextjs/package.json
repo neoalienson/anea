@@ -10,29 +10,31 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "14.0.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "@mui/material": "^5.15.0",
-    "@mui/icons-material": "^5.15.0",
+    "@auth/supabase-adapter": "^1.0.12",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "next-auth": "^4.24.5",
-    "@auth/supabase-adapter": "^1.0.12",
-    "@supabase/supabase-js": "^2.38.5",
+    "@mui/icons-material": "^5.15.0",
+    "@mui/material": "^5.15.0",
+    "@sentry/nextjs": "^7.85.0",
     "@stripe/stripe-js": "^2.4.0",
-    "stripe": "^14.9.0",
-    "recharts": "^2.8.0",
+    "@supabase/supabase-js": "^2.38.5",
+    "@types/bcryptjs": "^2.4.6",
     "axios": "^1.6.2",
+    "bcryptjs": "^3.0.2",
     "date-fns": "^2.30.0",
-    "@sentry/nextjs": "^7.85.0"
+    "next": "14.0.4",
+    "next-auth": "^4.24.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "^2.8.0",
+    "stripe": "^14.9.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "eslint": "^8.56.0",
-    "eslint-config-next": "14.0.4"
+    "eslint-config-next": "14.0.4",
+    "typescript": "^5.3.3"
   }
 }

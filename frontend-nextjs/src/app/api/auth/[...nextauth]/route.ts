@@ -1,13 +1,9 @@
 import NextAuth from 'next-auth'
-import { SupabaseAdapter } from '@auth/supabase-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { supabase } from '@/lib/supabase'
+import bcrypt from 'bcryptjs'
 
 const handler = NextAuth({
-  adapter: SupabaseAdapter({
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  }),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -18,17 +14,21 @@ const handler = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
         
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: credentials.email,
-          password: credentials.password,
-        })
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('email', credentials.email)
+          .single()
         
-        if (error || !data.user) return null
+        if (error || !user) return null
+        
+        const isValid = await bcrypt.compare(credentials.password, user.password_hash)
+        if (!isValid) return null
         
         return {
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.name,
+          id: user.id,
+          email: user.email,
+          role: user.role,
         }
       }
     })
@@ -42,12 +42,14 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.role = user.role
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string
+        session.user.role = token.role as string
       }
       return session
     },

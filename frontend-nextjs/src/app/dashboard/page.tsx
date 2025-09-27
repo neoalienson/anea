@@ -1,12 +1,26 @@
-import { getServerSession } from 'next-auth/next'
-import { redirect } from 'next/navigation'
-import { Container, Typography, Box } from '@mui/material'
+'use client'
 
-export default async function DashboardPage() {
-  const session = await getServerSession()
-  
+import { useSession } from 'next-auth/react'
+import { Container, Typography, Box, Paper, Button } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
+export default function DashboardPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin')
+    }
+  }, [status, router])
+
+  if (status === 'loading') {
+    return <Typography>Loading...</Typography>
+  }
+
   if (!session) {
-    redirect('/auth/signin')
+    return null
   }
 
   return (
@@ -15,9 +29,24 @@ export default async function DashboardPage() {
         <Typography variant="h4" component="h1" gutterBottom>
           Dashboard
         </Typography>
-        <Typography variant="body1">
-          Welcome, {session.user?.email}!
-        </Typography>
+        <Paper sx={{ p: 3, mt: 2 }}>
+          <Typography variant="h6">Welcome, {session.user?.email}!</Typography>
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            Role: {(session.user as any)?.role}
+          </Typography>
+          <Typography variant="body1" sx={{ mt: 1 }}>
+            User ID: {session.user?.id}
+          </Typography>
+          {(session.user as any)?.role === 'kol' && (
+            <Button 
+              variant="contained" 
+              sx={{ mt: 2 }}
+              onClick={() => router.push('/profile')}
+            >
+              Manage Profile
+            </Button>
+          )}
+        </Paper>
       </Box>
     </Container>
   )

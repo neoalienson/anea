@@ -1,34 +1,41 @@
+'use client'
+
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { Container, Typography, Button, Box } from '@mui/material'
-import Link from 'next/link'
 
 export default function HomePage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session) {
+      router.push('/dashboard')
+    }
+  }, [session, router])
+
+  if (status === 'loading') {
+    return <Typography>Loading...</Typography>
+  }
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="sm">
       <Box sx={{ py: 8, textAlign: 'center' }}>
-        <Typography variant="h2" component="h1" gutterBottom>
+        <Typography variant="h3" component="h1" gutterBottom>
           KOL Matching Platform
         </Typography>
-        <Typography variant="h5" component="h2" gutterBottom color="text.secondary">
+        <Typography variant="h6" color="text.secondary" paragraph>
           Connect SMBs with Key Opinion Leaders
         </Typography>
-        <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
-          <Button
-            component={Link}
-            href="/auth/signin"
-            variant="contained"
-            size="large"
-          >
-            Sign In
-          </Button>
-          <Button
-            component={Link}
-            href="/auth/signup"
-            variant="outlined"
-            size="large"
-          >
-            Sign Up
-          </Button>
-        </Box>
+        <Button 
+          variant="contained" 
+          size="large"
+          onClick={() => router.push('/auth/signin')}
+          sx={{ mt: 3 }}
+        >
+          Sign In
+        </Button>
       </Box>
     </Container>
   )

@@ -13,6 +13,9 @@ yarn-error.log*
 frontend-nextjs/.env.local
 supabase-config.js
 
+# Development supporting files
+dev_supporting/
+
 # Database
 *.db
 *.sqlite
