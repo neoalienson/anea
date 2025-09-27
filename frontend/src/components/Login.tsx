@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import { authAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,6 +22,14 @@ const Login: React.FC = () => {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+
+  // Redirect if already authenticated
+  React.useEffect(() => {
+    if (isAuthenticated && user) {
+      navigate(`/${user.role}/dashboard`);
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +99,11 @@ const Login: React.FC = () => {
           </Box>
           
           <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+            Don't have an account?{' '}
+            <Button onClick={() => navigate('/register')}>Register</Button>
+          </Typography>
+          
+          <Typography variant="body2" align="center" sx={{ mt: 1, fontSize: '0.8rem' }} color="text.secondary">
             Test accounts:<br />
             Business: techcorp@example.com<br />
             KOL: techreviewer@example.com<br />
