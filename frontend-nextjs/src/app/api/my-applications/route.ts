@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
     }
 
-    // Get campaigns the KOL has applied to
+    // Get campaigns the KOL has applied to (excluding declined/withdrawn)
     const { data, error } = await supabase
       .from('campaign_kols')
       .select(`
@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
         )
       `)
       .eq('kol_id', userId)
+      .not('status', 'eq', 'declined') // Exclude withdrawn applications
       .order('created_at', { ascending: false })
 
     if (error) {

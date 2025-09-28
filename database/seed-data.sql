@@ -472,9 +472,19 @@ INSERT INTO campaigns (id, business_id, title, description, objectives, requirem
  '{"startDate": "2024-02-15", "endDate": "2024-03-15", "applicationDeadline": "2024-02-10"}',
  'active');
 
+-- Add protein shake fitness campaign
+INSERT INTO campaigns (id, business_id, title, description, objectives, requirements, budget, timeline, status) VALUES
+('c3333333-3333-3333-3333-333333333333', 'b3333333-3333-3333-3333-333333333333', 'PowerFit Protein Shake Launch', 'Promote our new premium whey protein shake for fitness enthusiasts and gym-goers',
+ '[{"type": "awareness", "target": 300000, "metric": "impressions"}, {"type": "engagement", "target": 15000, "metric": "likes"}, {"type": "conversion", "target": 200, "metric": "sales"}]',
+ '{"platforms": ["youtube", "instagram"], "categories": ["fitness", "health", "nutrition", "gym", "workout"], "minFollowers": 30000, "maxFollowers": 300000, "targetDemographics": {"ageRange": ["18-35"], "interests": ["fitness", "bodybuilding", "nutrition", "health", "gym"]}}',
+ '{"total": 12000, "perKOL": 4000, "currency": "USD"}',
+ '{"startDate": "2024-03-15", "endDate": "2024-04-15", "applicationDeadline": "2024-03-10"}',
+ 'active');
+
 -- Insert campaign-KOL relationships
 INSERT INTO campaign_kols (campaign_id, kol_id, status, proposed_rate, agreed_rate) VALUES
 ('c1111111-1111-1111-1111-111111111111', 'k1111111-1111-1111-1111-111111111111', 'accepted', 3000, 3000),
 ('c1111111-1111-1111-1111-111111111111', 'k3333333-3333-3333-3333-333333333333', 'applied', 3500, null),
 ('c2222222-2222-2222-2222-222222222222', 'k2222222-2222-2222-2222-222222222222', 'accepted', 2000, 1800),
-('c2222222-2222-2222-2222-222222222222', 'k4444444-4444-4444-4444-444444444444', 'invited', null, null);
+('c2222222-2222-2222-2222-222222222222', 'k4444444-4444-4444-4444-444444444444', 'invited', null, null),
+('c3333333-3333-3333-3333-333333333333', 'k5555555-5555-5555-5555-555555555555', 'invited', null, null);

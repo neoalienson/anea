@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Container, Typography, Box, Card, CardContent, 
-  Grid, Chip, Alert, CardActionArea
+  Grid, Chip, Alert, CardActionArea, Button
 } from '@mui/material'
 import { Campaign, AttachMoney, Schedule, CheckCircle, Pending, Cancel } from '@mui/icons-material'
+import WithdrawButton from '@/components/WithdrawButton'
 
 interface ApplicationData {
   id: string
@@ -78,10 +79,13 @@ export default function MyApplicationsPage() {
   const fetchApplications = async () => {
     try {
       setLoading(true)
+      console.log('Fetching applications for user:', session?.user?.id);
       const response = await fetch(`/api/my-applications?userId=${session?.user?.id}`)
       
       if (response.ok) {
         const result = await response.json()
+        console.log('Applications fetched:', result.data?.length, 'items');
+        console.log('Application statuses:', result.data?.map((app: any) => ({ id: app.id, status: app.status })));
         setApplications(result.data || [])
       } else {
         setMessage('Failed to load applications')
@@ -96,6 +100,20 @@ export default function MyApplicationsPage() {
 
   const handleCampaignClick = (campaignId: string) => {
     router.push(`/campaigns/${campaignId}`)
+  }
+
+  const handleWithdrawSuccess = (withdrawnApplicationId: string) => {
+    console.log('Withdrawal successful, removing application:', withdrawnApplicationId);
+    // Immediately remove the withdrawn application from UI for better UX
+    setApplications(prev => {
+      const updated = prev.filter(app => app.id !== withdrawnApplicationId);
+      console.log('Applications after removal:', updated.length, 'remaining');
+      return updated;
+    });
+    // Also refresh the full list from server after a short delay
+    setTimeout(() => {
+      fetchApplications();
+    }, 500);
   }
 
   if (status === 'loading' || loading) {
@@ -140,68 +158,88 @@ export default function MyApplicationsPage() {
         {applications.length === 0 ? (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Campaign sx={{ fontSize: 64, color: 'grey.400', mb: 2 }} />
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              No Applications Yet
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              You haven't applied to any campaigns yet. Browse available campaigns to get started!
-            </Typography>
+                          <Typography variant="h6" color="text.secondary">
+                No pending applications
+              </Typography>
+              <Typography variant="body2" color="text.disabled">
+                You don't have any active applications. Browse available campaigns to apply!
+              </Typography>
           </Box>
         ) : (
           <Grid container spacing={3}>
             {applications.map((application) => (
               <Grid item xs={12} md={6} key={application.id}>
                 <Card sx={{ height: '100%' }}>
-                  <CardActionArea 
-                    onClick={() => handleCampaignClick(application.campaigns.id)}
-                    sx={{ height: '100%' }}
-                  >
-                    <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Campaign sx={{ mr: 1, color: 'primary.main' }} />
-                        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                          {application.campaigns.title}
-                        </Typography>
-                        {getStatusIcon(application.status)}
-                      </Box>
-                      
-                      <Typography variant="body2" color="text.secondary" paragraph sx={{ flexGrow: 1 }}>
-                        {application.campaigns.description}
+                  <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Campaign sx={{ mr: 1, color: 'primary.main' }} />
+                      <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                        {application.campaigns.title}
                       </Typography>
+                      {getStatusIcon(application.status)}
+                    </Box>
+                    
+                    <Typography variant="body2" color="text.secondary" paragraph sx={{ flexGrow: 1 }}>
+                      {application.campaigns.description}
+                    </Typography>
 
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
-                        <Typography variant="body2">
-                          Budget: ${application.campaigns.budget?.total?.toLocaleString()} {application.campaigns.budget?.currency}
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
+                      <Typography variant="body2">
+                        Budget: ${application.campaigns.budget?.total?.toLocaleString()} {application.campaigns.budget?.currency}
+                      </Typography>
+                    </Box>
+
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Categories:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {application.campaigns.requirements?.categories?.map((category, index) => (
+                          <Chip key={index} label={category} size="small" variant="outlined" />
+                        ))}
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto', mb: 2 }}>
+                      <Chip 
+                        label={application.status} 
+                        color={getStatusColor(application.status) as any}
+                        size="small"
+                      />
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Schedule sx={{ mr: 0.5, fontSize: 16, color: 'text.secondary' }} />
+                        <Typography variant="caption" color="text.secondary">
+                          Applied: {new Date(application.created_at).toLocaleDateString()}
                         </Typography>
                       </Box>
+                    </Box>
 
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          Categories:
-                        </Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {application.campaigns.requirements?.categories?.map((category, index) => (
-                            <Chip key={index} label={category} size="small" variant="outlined" />
-                          ))}
-                        </Box>
-                      </Box>
-
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
-                        <Chip 
-                          label={application.status} 
-                          color={getStatusColor(application.status) as any}
+                    {/* Action buttons */}
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between' }}>
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCampaignClick(application.campaigns.id)
+                        }}
+                      >
+                        View Campaign
+                      </Button>
+                      
+                      {(application.status === 'applied' || application.status === 'invited') && (
+                        <WithdrawButton
+                          type="application"
+                          id={application.id}
+                          title={application.campaigns.title}
+                          onSuccess={() => handleWithdrawSuccess(application.id)}
+                          variant="outlined"
                           size="small"
                         />
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Schedule sx={{ mr: 0.5, fontSize: 16, color: 'text.secondary' }} />
-                          <Typography variant="caption" color="text.secondary">
-                            Applied: {new Date(application.created_at).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </CardContent>
-                  </CardActionArea>
+                      )}
+                    </Box>
+                  </CardContent>
                 </Card>
               </Grid>
             ))}
