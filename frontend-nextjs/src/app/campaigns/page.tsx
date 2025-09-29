@@ -9,6 +9,7 @@ import {
   TextField, DialogActions, MenuItem, CardActionArea
 } from '@mui/material'
 import { Add, Campaign, AttachMoney, Visibility, People } from '@mui/icons-material'
+import WithdrawButton from '@/components/WithdrawButton'
 
 interface Campaign {
   id: string
@@ -46,13 +47,18 @@ export default function CampaignsPage() {
 
   const fetchCampaigns = async () => {
     try {
-      const response = await fetch('/api/campaigns')
+      const isBusiness = (session?.user as any)?.role === 'business';
+      const queryParams = isBusiness 
+        ? `?role=business&userId=${session?.user?.id}`
+        : '';
+      
+      const response = await fetch(`/api/campaigns${queryParams}`);
       if (response.ok) {
-        const result = await response.json()
-        setCampaigns(result.data || [])
+        const result = await response.json();
+        setCampaigns(result.data || []);
       }
     } catch (error) {
-      console.error('Error fetching campaigns:', error)
+      console.error('Error fetching campaigns:', error);
     }
   }
 
@@ -95,6 +101,15 @@ export default function CampaignsPage() {
     setLoading(false)
   }
 
+  const handleWithdrawSuccess = (removedId?: string) => {
+    // Optimistically remove from UI right away
+    if (removedId) {
+      setCampaigns(prev => prev.filter(c => c.id !== removedId))
+    }
+    // Then refresh to stay in sync
+    fetchCampaigns()
+  }
+
   if (status === 'loading') return <Typography>Loading...</Typography>
   if (!session) return null
 
@@ -129,58 +144,76 @@ export default function CampaignsPage() {
             <Grid item xs={12} md={6} key={campaign.id}>
               <Card sx={{ height: '100%' }}>
                 {isBusiness ? (
-                  <CardActionArea 
-                    onClick={() => router.push(`/campaigns/${campaign.id}`)}
-                    sx={{ height: '100%' }}
-                  >
-                    <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Campaign sx={{ mr: 1, color: 'primary.main' }} />
-                        <Typography variant="h6">{campaign.title}</Typography>
-                      </Box>
-                      
-                      <Typography variant="body2" color="text.secondary" paragraph>
-                        {campaign.description}
+                  <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Campaign sx={{ mr: 1, color: 'primary.main' }} />
+                      <Typography variant="h6">{campaign.title}</Typography>
+                    </Box>
+                    
+                    <Typography variant="body2" color="text.secondary" paragraph>
+                      {campaign.description}
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
+                      <Typography variant="body2">
+                        Budget: ${campaign.budget?.total?.toLocaleString()} {campaign.budget?.currency}
                       </Typography>
+                    </Box>
 
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <AttachMoney sx={{ mr: 1, color: 'success.main' }} />
-                        <Typography variant="body2">
-                          Budget: ${campaign.budget?.total?.toLocaleString()} {campaign.budget?.currency}
-                        </Typography>
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Categories:
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                        {campaign.requirements?.categories?.map((category, index) => (
+                          <Chip key={index} label={category} size="small" />
+                        ))}
                       </Box>
+                    </Box>
 
-                      <Box sx={{ mb: 2 }}>
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          Categories:
-                        </Typography>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                          {campaign.requirements?.categories?.map((category, index) => (
-                            <Chip key={index} label={category} size="small" />
-                          ))}
-                        </Box>
-                      </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto', mb: 2 }}>
+                      <Chip 
+                        label={campaign.status} 
+                        color={campaign.status === 'active' ? 'success' : 'default'}
+                        size="small"
+                      />
+                      <Typography variant="caption" color="text.secondary">
+                        Created: {new Date(campaign.created_at).toLocaleDateString()}
+                      </Typography>
+                    </Box>
 
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
-                        <Chip 
-                          label={campaign.status} 
-                          color={campaign.status === 'active' ? 'success' : 'default'}
+                    {/* Action buttons */}
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between' }}>
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        startIcon={<People />}
+                        onClick={() => router.push(`/campaigns/${campaign.id}/applications`)}
+                      >
+                        Applications
+                      </Button>
+
+                      <Button 
+                        variant="outlined" 
+                        size="small"
+                        onClick={() => router.push(`/campaigns/${campaign.id}`)}
+                      >
+                        View Details
+                      </Button>
+                      
+                      {(campaign.status === 'active' || campaign.status === 'draft') && (
+                        <WithdrawButton
+                          type="campaign"
+                          id={campaign.id}
+                          title={campaign.title}
+                          onSuccess={() => handleWithdrawSuccess(campaign.id)}
+                          variant="outlined"
                           size="small"
                         />
-                        <Button 
-                          variant="outlined" 
-                          size="small"
-                          startIcon={<People />}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            router.push(`/campaigns/${campaign.id}/applications`)
-                          }}
-                        >
-                          View Applications
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </CardActionArea>
+                      )}
+                    </Box>
+                  </CardContent>
                 ) : (
                   <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

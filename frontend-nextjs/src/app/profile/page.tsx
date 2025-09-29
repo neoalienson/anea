@@ -15,6 +15,8 @@ import {
   Analytics, ThumbUp, Share, Comment, Visibility,
   Security, EmojiEvents, School
 } from '@mui/icons-material'
+import AIProfileEnhancer from '@/components/AIProfileEnhancer'
+import AICampaignMatcher from '@/components/AICampaignMatcher'
 
 interface KOLProfile {
   display_name: string
@@ -414,6 +416,20 @@ export default function ProfilePage() {
                 )}
               </CardContent>
             </Card>
+          </Grid>
+        </Grid>
+
+        {/* AI Enhancement Section */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12}>
+            <AIProfileEnhancer />
+          </Grid>
+        </Grid>
+
+        {/* AI Campaign Matching */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12}>
+            <AICampaignMatcher />
           </Grid>
         </Grid>
 

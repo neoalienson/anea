@@ -43,26 +43,27 @@ export default function DashboardPage() {
       if (userRole === 'business') {
         // Fetch business dashboard data
         const [campaignsRes, profileRes] = await Promise.all([
-          fetch('/api/campaigns'),
+          fetch(`/api/campaigns?role=business&userId=${session?.user?.id}`),
           fetch(`/api/profile/${session?.user?.id}?type=business`)
         ])
         
         const campaigns = campaignsRes.ok ? await campaignsRes.json() : { data: [] }
         const profile = profileRes.ok ? await profileRes.json() : { data: {} }
-        
-        const activeCampaigns = campaigns.data?.filter((c: any) => c.status === 'active').length || 0
-        const pendingCampaigns = campaigns.data?.filter((c: any) => c.status === 'draft').length || 0
+        // API already excludes cancelled campaigns for business view
+        const rows = Array.isArray(campaigns.data) ? campaigns.data : []
+        const activeCampaigns = rows.filter((c: any) => c.status === 'active').length
+        const pendingCampaigns = rows.filter((c: any) => c.status === 'draft').length
         
         setDashboardData({
           activeCampaigns,
           pendingCampaigns,
-          totalCampaigns: campaigns.data?.length || 0,
+          totalCampaigns: rows.length,
           profile: profile.data
         })
         
         // Generate recent activities from actual data
         const activities: any[] = []
-        campaigns.data?.slice(0, 3).forEach((campaign: any) => {
+        rows.slice(0, 3).forEach((campaign: any) => {
           const daysSince = Math.floor((Date.now() - new Date(campaign.created_at).getTime()) / (1000 * 60 * 60 * 24))
           activities.push({
             type: 'campaign',

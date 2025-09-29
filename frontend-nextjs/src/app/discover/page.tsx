@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Container, Typography, Box, Card, CardContent, Grid,
-  TextField, MenuItem, Button, Chip, Avatar, InputAdornment
+  TextField, MenuItem, Button, Chip, Avatar, InputAdornment, Divider
 } from '@mui/material'
 import { Search, YouTube, People, TrendingUp } from '@mui/icons-material'
+import InstagramKOLDiscovery from '@/components/InstagramKOLDiscovery'
 
 interface KOL {
   id: string
@@ -93,8 +94,15 @@ export default function DiscoverPage() {
     <Container maxWidth="lg">
       <Box sx={{ py: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Discover KOLs
+          AI - powered KOL Discovery
         </Typography>
+
+        {/* Simulated Instagram Discovery (HK) */}
+        <Box sx={{ mb: 4, p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
+          <InstagramKOLDiscovery />
+        </Box>
+
+        <Divider sx={{ my: 3 }} />
 
         <Box sx={{ mb: 4, p: 3, bgcolor: 'background.paper', borderRadius: 2 }}>
           <Grid container spacing={2}>

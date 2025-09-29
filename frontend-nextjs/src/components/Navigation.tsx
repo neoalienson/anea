@@ -69,6 +69,14 @@ export default function Navigation() {
               >
                 Discover
               </Button>
+              <Button
+                color="inherit"
+                startIcon={<Assignment />}
+                onClick={() => router.push('/contact-requests')}
+                sx={{ opacity: pathname === '/contact-requests' ? 1 : 0.7 }}
+              >
+                Contacts
+              </Button>
             </>
           )}
 
