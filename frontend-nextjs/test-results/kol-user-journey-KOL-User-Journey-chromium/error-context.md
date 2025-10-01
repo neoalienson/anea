@@ -1,0 +1,107 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: KOL Platform
+      - generic [ref=e5]:
+        - button "Dashboard" [ref=e6] [cursor=pointer]:
+          - img [ref=e8] [cursor=pointer]
+          - text: Dashboard
+        - button "Profile" [ref=e10] [cursor=pointer]:
+          - img [ref=e12] [cursor=pointer]
+          - text: Profile
+        - button "Campaigns" [ref=e14] [cursor=pointer]:
+          - img [ref=e16] [cursor=pointer]
+          - text: Campaigns
+        - button "My Applications" [ref=e18] [cursor=pointer]:
+          - img [ref=e20] [cursor=pointer]
+          - text: My Applications
+        - button "T" [ref=e22] [cursor=pointer]:
+          - generic [ref=e23] [cursor=pointer]: T
+  - generic [ref=e25]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - heading "🌙 Good Evening, techreviewer! 👋" [level=3] [ref=e29]
+        - heading "🎬 Content Creator Dashboard • 10/1/2025" [level=6] [ref=e30]
+      - generic [ref=e31]: T
+    - generic [ref=e32]:
+      - generic [ref=e35]:
+        - img [ref=e38]
+        - heading "0" [level=4] [ref=e41]
+        - paragraph [ref=e42]: Total Reach
+      - generic [ref=e45]:
+        - img [ref=e48]
+        - heading "0.0%" [level=4] [ref=e51]
+        - paragraph [ref=e52]: Engagement Rate
+      - generic [ref=e55]:
+        - img [ref=e58]
+        - heading "2" [level=4] [ref=e61]
+        - paragraph [ref=e62]: Active Applications
+      - generic [ref=e65]:
+        - img [ref=e68]
+        - heading "2" [level=4] [ref=e71]
+        - paragraph [ref=e72]: Total Applications
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - generic [ref=e76]:
+          - heading "Quick Actions" [level=6] [ref=e77]:
+            - img [ref=e78]
+            - text: Quick Actions
+          - generic [ref=e80]:
+            - button "View Profile" [ref=e82] [cursor=pointer]:
+              - img [ref=e84] [cursor=pointer]
+              - text: View Profile
+            - button "Browse Campaigns" [ref=e87] [cursor=pointer]:
+              - img [ref=e89] [cursor=pointer]
+              - text: Browse Campaigns
+            - button "My Applications" [ref=e92] [cursor=pointer]:
+              - img [ref=e94] [cursor=pointer]
+              - text: My Applications
+            - button "Analytics" [ref=e97] [cursor=pointer]:
+              - img [ref=e99] [cursor=pointer]
+              - text: Analytics
+        - generic [ref=e102]:
+          - heading "Recent Activity" [level=6] [ref=e103]:
+            - img [ref=e104]
+            - text: Recent Activity
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]:
+                - img [ref=e110]
+                - generic [ref=e112]:
+                  - paragraph [ref=e113]: Applied to "Iphone 17 Phone case promotion"
+                  - generic [ref=e114]: 2 days ago
+              - separator [ref=e115]
+            - generic [ref=e117]:
+              - img [ref=e119]
+              - generic [ref=e121]:
+                - paragraph [ref=e122]: Applied to "New Protein Shake launch"
+                - generic [ref=e123]: 3 days ago
+      - generic [ref=e124]:
+        - generic [ref=e126]:
+          - heading "📋 Profile Completion" [level=6] [ref=e127]
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - paragraph [ref=e130]: Profile Strength
+              - paragraph [ref=e131]: 85%
+            - progressbar [ref=e132]
+            - paragraph [ref=e134]: Complete your social media verification to reach 100%
+            - button "Complete Profile" [ref=e135] [cursor=pointer]: Complete Profile
+        - generic [ref=e137]:
+          - heading "📈 Performance Insights" [level=6] [ref=e138]
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - paragraph [ref=e141]: YouTube Subscribers
+              - paragraph [ref=e142]: "0"
+            - generic [ref=e143]:
+              - paragraph [ref=e144]: Instagram Followers
+              - paragraph [ref=e145]: "0"
+            - generic [ref=e146]:
+              - paragraph [ref=e147]: Content Quality Score
+              - paragraph [ref=e148]: 0.0/10
+            - paragraph [ref=e149]: 📝 Complete your profile to unlock collaboration opportunities
+    - paragraph [ref=e151]: 🚀 Ready to take your content to the next level? Explore new campaign opportunities and grow your audience!
+  - alert [ref=e152]
+```

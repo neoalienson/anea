@@ -1,26 +1,37 @@
 # E2E Testing Guide
 
-This guide covers the end-to-end testing setup and execution for the KOL Matching Platform.
+This guide covers the end-to-end testing setup and execution for the KOL Matching Platform using both Cypress and Playwright testing frameworks.
 
 ## Overview
 
-The E2E testing suite uses Cypress to validate complete user journeys for both Business and KOL users, ensuring the platform works correctly from a user's perspective.
+The E2E testing suite validates complete user journeys for both Business and KOL users, ensuring the platform works correctly from a user's perspective. We use two testing frameworks:
+- **Cypress** - Primary E2E testing framework with superior developer experience and debugging
+- **Playwright** - Secondary framework for cross-browser testing and CI/CD
 
 ## Setup
 
 ### Prerequisites
 - Node.js 18+
-- Frontend and backend servers running
-- Test data populated in database
+- Frontend server running on http://localhost:3000
+- Backend server running on http://localhost:8000
+- Test data populated in Supabase database
 
 ### Installation
 ```bash
 cd frontend-nextjs
-npm install cypress --save-dev
+npm install @playwright/test cypress --save-dev
 ```
 
 ### Configuration
-The Cypress configuration is in `cypress.config.ts`:
+
+#### Playwright Configuration (`playwright.config.ts`)
+- Base URL: http://localhost:3000
+- Browser: Chromium (Desktop Chrome)
+- Screenshots: On failure only
+- Retries: 2 in CI, 0 locally
+- Auto-starts dev server if not running
+
+#### Cypress Configuration (`cypress.config.ts`)
 - Base URL: http://localhost:3000
 - Viewport: 1280x720
 - Screenshots enabled on failure
@@ -28,58 +39,74 @@ The Cypress configuration is in `cypress.config.ts`:
 
 ## Test Structure
 
-### Test Files
+### Playwright Tests (Primary)
+- `tests/business-user-journey.spec.ts` - Complete business user workflow
+- `tests/kol-user-journey.spec.ts` - Complete KOL user workflow
+- `tests/business-user-simple.spec.ts` - Simplified business flow
+- `tests/simple-test.spec.ts` - Basic functionality test
+
+### Cypress Tests (Alternative)
 - `cypress/e2e/business-user-journey.cy.ts` - Complete business user workflow
 - `cypress/e2e/kol-user-journey.cy.ts` - Complete KOL user workflow
 
 ### Test Data
-- Business User: techcorp@example.com / password123
-- KOL User: techreviewer@example.com / password123
+- **Business Users**: 
+  - techcorp@example.com / password123 (TechCorp Solutions)
+  - fashionbrand@example.com / password123 (Fashion Forward)
+- **KOL Users**: 
+  - techreviewer@example.com / password123 (Tech Reviewer Pro)
+  - beautyguru@example.com / password123 (Beauty Guru Maya)
+  - gamingpro@example.com / password123 (Gaming Pro)
 
 ## Running Tests
 
-### Interactive Mode
+### Cypress Tests (Recommended)
 ```bash
-npm run cypress:open
-```
-Opens Cypress Test Runner for interactive testing and debugging.
-
-### Headless Mode
-```bash
-npm run cypress:run
-```
-Runs all tests in headless mode for CI/CD pipelines.
-
-### Specific Tests
-```bash
+# Run all tests headless
 npm run test:e2e
+
+# Interactive mode for debugging
+npm run test:e2e:open
+
+# Run in headed mode (visible browser)
+npm run test:e2e:headed
 ```
-Runs all E2E tests with screenshot capture.
+
+### Playwright Tests
+```bash
+# Run Playwright tests
+npm run test:playwright
+
+# Playwright UI mode
+npx playwright test --ui
+```
 
 ## Test Coverage
 
-### Business User Journey
-1. **Landing Page** - Initial platform access
-2. **Authentication** - Secure login process
-3. **Dashboard** - Business user overview
-4. **Campaign Management** - View existing campaigns
-5. **Campaign Creation** - Create new marketing campaign
-6. **Campaign Confirmation** - Verify successful creation
-7. **KOL Discovery** - Search and filter KOLs
-8. **Filtered Results** - Apply search criteria
-9. **KOL Profile View** - Detailed KOL evaluation
-10. **Logout** - Secure session termination
+### Business User Journey (11 Steps)
+1. **Landing Page** - Platform introduction and navigation
+2. **Authentication** - Secure login with business credentials
+3. **Business Dashboard** - Overview with metrics and quick actions
+4. **Campaign Management** - View existing campaigns and status
+5. **Campaign Creation** - Create new marketing campaign with form validation
+6. **Campaign Confirmation** - Verify successful creation and data persistence
+7. **KOL Discovery** - AI-powered search and filtering system
+8. **Search Functionality** - Filter KOLs by category, followers, engagement
+9. **KOL Profile Viewing** - Detailed creator evaluation (if available)
+10. **Dashboard Navigation** - Return to main business dashboard
+11. **Secure Logout** - Session termination and redirect
 
-### KOL User Journey
-1. **Landing Page** - Platform entry point
-2. **Authentication** - KOL login process
-3. **Dashboard** - Creator-specific overview
-4. **Profile Management** - Update creator profile
-5. **Profile Update** - Confirm changes saved
-6. **Metrics Integration** - Load YouTube analytics
-7. **Campaign Discovery** - Browse opportunities
-8. **Campaign Application** - Apply to campaigns
-9. **Logout** - Session completion
+### KOL User Journey (10 Steps)
+1. **Landing Page** - Platform entry point with value proposition
+2. **Authentication** - KOL login with creator credentials
+3. **Creator Dashboard** - Content creator specific overview and metrics
+4. **Profile Management** - Access comprehensive profile editor
+5. **Profile Updates** - Update personal information, social links, bio
+6. **YouTube Integration** - Load real-time channel metrics and analytics
+7. **Campaign Discovery** - Browse available brand collaboration opportunities
+8. **Application Management** - View and manage campaign applications
+9. **Dashboard Return** - Navigate back to main creator dashboard
+10. **Secure Logout** - Session completion and security
 
 ## Screenshot Documentation
 

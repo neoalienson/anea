@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed"
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open",
+    "test:e2e:headed": "cypress run --headed",
+    "test:playwright": "playwright test",
+    "test:e2e:full": "node run-e2e-tests.js"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.0.12",
@@ -37,6 +39,7 @@
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "cypress": "^15.3.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
     "typescript": "^5.3.3"
